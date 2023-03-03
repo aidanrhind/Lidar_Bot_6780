@@ -3,3 +3,4 @@ Group project for ECE/CS6780 Embedded SYS. Focusing on 2D lidar integration with
 ## Group Members (Milestone 0) ##
 
 Emma Wadsworth
+Michael Macias
