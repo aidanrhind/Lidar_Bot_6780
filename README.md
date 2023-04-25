@@ -7,7 +7,10 @@ Michael Macias
 ## Introduction ##
 This rover has been built to complete the task of navigating a simple maze without running into any of the obstacles. The rover can be operated remotely, however the operator cannot see the maze, and only has access to data from the rovers sensors transmitted over a 9600 baud serial connection.\
 The rover design is equipped with a 360 degree LiDAR sensor, two motors with associated drivers, and a bluetooth serial tranciever. The essential idea is that the operator will recieve LiDAR data, and return control signals which the rover will follow as it navigates the maze. The rover is able to transmit LiDAR data to the user, recieve signals from the user, and complete forward and backward motion as well as pivots left and right.\
-!!! insert basic schematic here !!!
+
+![top](https://user-images.githubusercontent.com/74335040/234170795-cedc2ff6-667e-4219-ac55-de3101101bc4.jpg)
+![front](https://user-images.githubusercontent.com/74335040/234170816-ebd0f80e-aac0-4697-83dd-0e3bc1f046ec.jpg)
+
 ## Hardware Setup ##
 Insert intro to how the rover is put together\
 !!! insert wiring diagram here !!!
