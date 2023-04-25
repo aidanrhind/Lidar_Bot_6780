@@ -6,19 +6,23 @@ Emma Wadsworth
 Michael Macias
 ## Introduction ##
 This rover has been built to complete the task of navigating a simple maze without running into any of the obstacles. The rover can be operated remotely, however the operator cannot see the maze, and only has access to data from the rovers sensors transmitted over a 9600 baud serial connection.\
-The rover design is equipped with a 360 degree LiDAR sensor, two motors with associated drivers, and a bluetooth serial tranciever. The essential idea is that the operator will recieve LiDAR data, and return control signals which the rover will follow as it navigates the maze. The rover is able to transmit LiDAR data to the user, recieve signals from the user, and complete forward and backward motion as well as pivots left and right.\
+The rover design is equipped with a 360 degree LiDAR sensor, two motors with associated drivers, and a bluetooth serial tranciever. The essential idea is that the operator will recieve LiDAR data, and return control signals which the rover will follow as it navigates the maze. The rover is able to transmit LiDAR data to the user, recieve signals from the user, and complete forward and backward motion as well as pivots left and right.
 
-![top](https://user-images.githubusercontent.com/74335040/234170795-cedc2ff6-667e-4219-ac55-de3101101bc4.jpg)
-![front](https://user-images.githubusercontent.com/74335040/234170816-ebd0f80e-aac0-4697-83dd-0e3bc1f046ec.jpg)
-
+![schem](https://user-images.githubusercontent.com/74335040/234171549-d08da05c-f69a-4462-8446-3461c402e0fd.jpg)
 ## Hardware Setup ##
-Insert intro to how the rover is put together\
-!!! insert wiring diagram here !!!
+![wiring](https://user-images.githubusercontent.com/74335040/234171776-6e808a7f-367d-43e4-af37-32d20265b4e3.jpg)
 ### Component Information ###
-!!! insert final version of BoM with datasheets included !!!\
-make notes on specs custom parts, namely chassis and motor drivers\
-also briefly discuss design choices (ie larger STM board needed to process LiDAR data)\
-!!! insert picture of rover here !!!
+Component|Part|Information|
+--- | --- | --- 
+LiDAR | XV11 Lidar sensor | https://www.ev3dev.org/docs/tutorials/using-xv11-lidar/ | 
+Motors | insert part here | insert link here |
+USART | HC-05 - Bluetooth Module | https://components101.com/wireless/hc-05-bluetooth-module |
+STM32 | STM32F4DISCO | insert link here |
+Motor Drivers | Custom (in class) | [HW_full_solution.zip](https://github.com/aidanrhind/Lidar_Bot_6780/files/11316879/HW_full_solution.zip)|
+
+As a note, the STM board was selected to be large enough to handle the amount of LiDAR data the sensor produced--this is the most notable design constraint.\
+!!! insert picture of rover here !!!\
+The rover is powered with two 9V batteries and a usb charge block, and mounted to a small 3D printed chassis
 ## Control ##
 will be filled by EW pending code submission--I will summarize our approach to the dual PI loop as well as how things fit together. I cannot speak much to the LiDAR sensor, however beyond when and how it reports data to the user.\
 !!! insert flowchart here !!!
