@@ -21,8 +21,8 @@ STM32 | STM32F4DISCO | insert link here |
 Motor Drivers | Custom (in class) | [HW_full_solution.zip](https://github.com/aidanrhind/Lidar_Bot_6780/files/11316879/HW_full_solution.zip)|
 
 As a note, the STM board was selected to be large enough to handle the amount of LiDAR data the sensor produced--this is the most notable design constraint.\
+Another consideration was the power for the motors; a single 9V battery could not provide sufficient current to the motors, so two were used.\
 !!! insert picture of rover here !!!\
 The rover is powered with two 9V batteries and a usb charge block, and mounted to a small 3D printed chassis
 ## Control ##
-will be filled by EW pending code submission--I will summarize our approach to the dual PI loop as well as how things fit together. I cannot speak much to the LiDAR sensor, however beyond when and how it reports data to the user.\
-!!! insert flowchart here !!!
+The user recieves LiDAR data in a form with angle then distance (more detail pending). The user will then input direction controls, which are transmitted back to the rover. blah blah PID loop.
