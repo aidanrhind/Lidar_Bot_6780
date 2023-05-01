@@ -20,10 +20,13 @@
 #include "main.h"
 #include "String.h"
 #include "USART_SEND.h"
+#include "lidar_parse.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
+
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
@@ -43,7 +46,7 @@
 TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
-void parseDistance(uint8_t * packagePointer);
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,18 +61,6 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-	uint16_t angle = 0;
-	uint8_t x = 0;
-	uint8_t y = 0;
-	uint16_t distance1 = 0;
-	uint16_t distance2 = 0;
-	uint16_t distance3 = 0;
-	uint16_t distance4 = 0;
-uint8_t Uart1_RxBuff[22] = {0};		
-uint8_t Uart1_Rx_Cnt = 0;		
-
-uint8_t DistanceBuff[360] = {0};
-uint16_t data[5] = {0};
 
 
 /* USER CODE END 0 */
@@ -81,8 +72,8 @@ uint16_t data[5] = {0};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-uint8_t startIndex[] = "startlds$";
 
+uint8_t startIndex[] = "startlds$";
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -110,66 +101,71 @@ uint8_t startIndex[] = "startlds$";
 LL_USART_EnableIT_RXNE(USART3);
 LL_USART_EnableIT_PE(USART3);
 LL_USART_Enable(USART1);
+uint8_t i;
+  //SyncUp();
 //HAL_UART_Transmit(&huart1, &distance1, sizeof(distance1), 100);
 //HAL_Delay(1000);
-uint16_t i = 0;
-	for (i = 0; i < 9; i++) {
-		LL_USART_TransmitData8(USART1, startIndex[i]);
-		HAL_Delay(10);
-	}
+//LL_USART_TransmitData8(USART1, startIndex[0]);
   /* USER CODE END 2 */
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
     while(1)
     {
-			uint16_t x = 0;
-			angle = data[0];
-			Usart_send_string(USART1, "angle ");
-			Usart_send_u16(USART1,(uint16_t)angle);
+					start_parse_XV11();
+			
+			for (i = 0; i < 4; i++)
+		{
+			Usart_send_string(USART1,"angle ");
+			Usart_send_u16(USART1,(uint16_t)raderData[i].angle);
 			Usart_send_space(USART1);
-			distance1 = data[1];
-			Usart_send_string(USART1,"distance ");
-			Usart_send_u16(USART1,(uint16_t)distance1);
+			Usart_send_string(USART1,"distence ");
+			Usart_send_u16(USART1,raderData[i].distance);
 			usart_send_enter(USART1);
-		//	LL_USART_TransmitData8(USART1, data[1]);
-		//	HAL_Delay(100);
-		
-	}
-		} 
+			//Usart_send_u16(USART1,raderDataTable[9]);
+			//usart_send_enter(USART1);
+		}
+		}
+}
+
+
 void USART_RxIdleCallback(void)
 {
+	char ch;
    if (LL_USART_IsActiveFlag_RXNE(USART3))
-   {
-    Uart1_RxBuff[Uart1_Rx_Cnt++] = LL_USART_ReceiveData8(USART3); //receive data
-		if (Uart1_RxBuff[0] != 0xfa) {
-			Uart1_Rx_Cnt = 0;
-			return;
+   {	 
+		raderReceiveQueue[raderReceiveCnt]= LL_USART_ReceiveData8(USART3); //receive data
+		 uint8_t i;
+		 for(i = 0; i < 21; i++)
+		{
+			raderReceiveQueue[i] = raderReceiveQueue[i + 1];
 		}
-		if ((Uart1_RxBuff[1] < 0xa0 || Uart1_RxBuff[1] > 0xF9)
-				&& Uart1_Rx_Cnt > 1) {
-			Uart1_Rx_Cnt = 0;
-			return;
-		}
-		if (Uart1_Rx_Cnt < 22)  //????
-				{
-			return;
-		} else {
-			uint8_t i = 0;
-			for (i = 0; i < 4; i++) {
-			data[0] = (uint16_t) (Uart1_RxBuff[1] & 0x00ff) - 0x009f;
-			data[1] = Uart1_RxBuff[5] + ((Uart1_RxBuff[6]& 0x3F) << 8);
-			data[2] = Uart1_RxBuff[9] + ((Uart1_RxBuff[10]& 0x3F) << 8);
-			data[3] = Uart1_RxBuff[13] + ((Uart1_RxBuff[14]& 0x3F) << 8);
-			data[4] = Uart1_RxBuff[17] + ((Uart1_RxBuff[15]& 0x3F) << 8);
-			//DistanceBuff[data[0] + i] = data[1]
-				Uart1_Rx_Cnt = 0;
-				
+		raderReceiveQueue[21] = LL_USART_ReceiveData8(USART3);		
+		if (raderReceiveQueue[0] == 0xfa)
+		{			
+			int chk32 = 0;
+			int checknum = 0;
+			
+			for ( i= 0; i < 10; i++)
+			{
+				int d = raderReceiveQueue[2 * i] + (raderReceiveQueue[2 * i + 1] << 8);
+				chk32 = (chk32 << 1) + d;
 			}
-		}
-     
-   }
+			chk32 = (chk32 & 0x7FFF) + (chk32 >> 15);
+			chk32 = chk32 & 0x7FFF;
+			checknum = (raderReceiveQueue[21] << 8) + raderReceiveQueue[20];
+			if (checknum == chk32)//????
+			{
+				uint8_t i;
+				for (i = 0; i < 22; i++)
+				{
+					raderReceiveBuffer[i] = raderReceiveQueue[i];
+				}
+				raderDataCorrectFlag = SET;				
+			}
+		}	
+	}
 }
+      	
 
 /**
   * @brief System Clock Configuration
