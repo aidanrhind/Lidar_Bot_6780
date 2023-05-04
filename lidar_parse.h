@@ -7,21 +7,21 @@
 #define true 1
 #define false 0
 /* ???? ------------------------------------------------------------------*/
-extern uint8_t raderReceiveQueue[22];
-extern uint8_t raderReceiveBuffer[22];
-extern uint8_t raderReceiveCnt;
-extern FlagStatus raderDataCorrectFlag;
-extern uint8_t raderOriginalDataTable[22];//???
-extern uint16_t raderDataTable[36];//????
-extern FlagStatus raderBusyFlag;
+extern uint8_t ReceiveQueue[22];
+extern uint8_t ReceiveBuffer[22];
+extern uint8_t ReceiveCnt;
+extern FlagStatus DataCorrectFlag;
+extern uint8_t OriginalDataTable[22];//???
+extern uint16_t DataTable[36];//????
+extern FlagStatus BusyFlag;
 typedef struct
 {
 	bool disvalid;
 	uint16_t distance;
 	uint8_t sigintens;
 	uint8_t angle;
-}raderDataTypeDef;
-extern raderDataTypeDef raderData[4];  
-/* ???? ------------------------------------------------------------------*/
-extern void start_parse_XV11();
+}DataTypeDef;
+extern DataTypeDef Data[4];  
+
+extern send_data();
 #endif
