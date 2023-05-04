@@ -1,12 +1,6 @@
 #include "USART_SEND.h"
 #include "stm32f4xx.h"
-/************************************************************  
- * Function: USART_SEND  
- * Description: The main function
- * Calls:  
- * Author: zilin Wang      Build_Date:2017/3/25 ???    
- * Others:  
-************************************************************/  
+
 void Usart_send_byte(USART_TypeDef * USARTx, uint8_t Byte)
 {
 	while((USARTx->SR & USART_SR_TC) != USART_SR_TC);		
