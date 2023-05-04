@@ -29,7 +29,7 @@ void send_data(void)
 			   Data[x].distance = ((0x3f & OriginalDataTable[5 + beg]) << 8) | OriginalDataTable[4 + beg];
 			   Data[x].sigintens = (OriginalDataTable[7 + beg] << 8) + OriginalDataTable[6 + beg];
 			   Data[x].angle = (OriginalDataTable[1]-0xa0)*4 + x;
-			   if (Data[x].angle >= 355)//?????5? Turn clockwise 5 degrees
+			   if (Data[x].angle >= 355)
 				   DataTable[(Data[x].angle - 355)/ 10] = Data[x].distance;
 			   else
 				   DataTable[(Data[x].angle + 5)/ 10] = Data[x].distance;
